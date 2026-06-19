@@ -312,15 +312,28 @@
     renderLibrary();
   }
 
+  // Ask the browser to make this origin's storage persistent (exempt from the
+  // automatic eviction Safari does after ~7 days idle / under storage pressure).
+  // Best-effort: returns whether storage is persisted afterward.
+  async function ensurePersisted() {
+    try {
+      if (!(navigator.storage && navigator.storage.persist)) return false;
+      if (await navigator.storage.persisted()) return true;
+      return await navigator.storage.persist();
+    } catch (e) { return false; }
+  }
+
   async function updateStorageLine() {
     let line = '';
     if (navigator.storage && navigator.storage.estimate) {
       const est = await navigator.storage.estimate();
       line = fmtBytes(est.usage || 0) + ' used on device';
     }
+    let persisted = false;
+    try { persisted = !!(navigator.storage && await navigator.storage.persisted()); } catch (e) {}
     const cards = await getAll('cards');
-    $('storeline').textContent = (cards.length + ' cards offline' + (line ? ' · ' + line : '')) +
-      ' · iOS may clear this if storage runs low';
+    $('storeline').textContent = cards.length + ' cards offline' + (line ? ' · ' + line : '') +
+      (persisted ? ' · saved permanently' : ' · iOS may clear this if storage runs low');
   }
 
   // ---- Browse / search ----------------------------------------------------
@@ -460,6 +473,7 @@
                       : navigator.serviceWorker.register('/sw.js', { scope: '/' }));
       } catch (e) {}
     }
+    await ensurePersisted();
     setNet();
     let saved = null;
     try { saved = localStorage.getItem('canto-profile'); } catch (e) {}
