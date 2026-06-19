@@ -393,6 +393,7 @@
 
   function renderReview() {
     const stage = $('rev-stage');
+    window.scrollTo(0, 0);   // start each card at the top, not where the last grade left us
     $('rev-counts').textContent = queue.length + ' due';
     if (queue.length === 0) {
       stage.innerHTML = '<p class="emptyhint">Nothing due. Save cards from Browse, or come back later.</p>';
@@ -439,6 +440,10 @@
   function showTab(name) {
     document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === 'panel-' + name));
     document.querySelectorAll('.tabbar button').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
+    // Each tab is a separate view; switching keeps the window's scroll offset,
+    // so a far-scrolled Browse leaves the shorter Review/Library panel scrolled
+    // off-screen (blank until you scroll up). Reset to the top on every switch.
+    window.scrollTo(0, 0);
     if (name === 'lib') renderLibrary();
     if (name === 'browse') runSearch($('search').value);
     if (name === 'review') startReview();

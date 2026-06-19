@@ -1,7 +1,7 @@
-const SHELL_V = 'canto-static-9ac627be';
+const SHELL_V = 'canto-static-fcb93bc5';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest',
-  'static/app.css?v=9ac627be', 'static/tones.js?v=9ac627be', 'static/dict.js?v=9ac627be', 'static/study.js?v=9ac627be',
+  'static/app.css?v=fcb93bc5', 'static/tones.js?v=fcb93bc5', 'static/dict.js?v=fcb93bc5', 'static/study.js?v=fcb93bc5',
   'static/apple-touch-icon.png', 'static/icon-192.png', 'static/icon-512.png',
   'data/sources.json',
 ];
