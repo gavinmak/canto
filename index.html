@@ -59,10 +59,13 @@
   .reveal-btn { width: 100%; padding: .9rem; margin-top: 1rem; border: 1px solid var(--line);
                 border-radius: 10px; background: var(--jade); color: #fff; font: inherit; cursor: pointer; }
   /* profile chip in the header + full-screen picker */
-  .whoami { margin-left: auto; border: 1px solid var(--line); background: var(--surface);
+  .whoami { margin-left: .5rem; border: 1px solid var(--line); background: var(--surface);
             border-radius: 999px; padding: .25rem .7rem; font: inherit; font-size: .78rem;
             color: var(--ink-2); cursor: pointer; }
   .whoami b { color: var(--jade); }
+  .streak { margin-left: auto; font-size: .82rem; font-weight: 700; color: var(--muted);
+            white-space: nowrap; }
+  .streak.active { color: var(--jade); }
   .profile-gate { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center;
                   justify-content: center; background: var(--paper); }
   .profile-gate[hidden] { display: none; }
@@ -85,6 +88,7 @@
     <div class="stophead">
       <span class="netdot" id="netdot" title="network"></span>
       <h1>Canto Study</h1>
+      <span class="streak" id="streak" title="daily review streak" hidden></span>
       <button class="whoami" id="whoami" hidden></button>
     </div>
     <div class="storeline" id="storeline">—</div>

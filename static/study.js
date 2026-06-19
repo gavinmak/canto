@@ -163,6 +163,42 @@
     const chip = $('whoami');
     chip.hidden = false;
     chip.innerHTML = '<b>' + esc(p) + '</b> · switch';
+    renderStreak();
+  }
+
+  // ---- daily streak (per profile, localStorage) ---------------------------
+  // Consecutive calendar days with at least one review. Bumped on each grade;
+  // the displayed count drops to 0 once a day is missed (streak broken).
+  const ymd = (ms) => {
+    const d = new Date(ms);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') +
+           '-' + String(d.getDate()).padStart(2, '0');
+  };
+  const todayStr = () => ymd(Date.now());
+  const streakKey = () => 'canto-streak-' + PROFILE;
+
+  function getStreak() {
+    try { return JSON.parse(localStorage.getItem(streakKey())) || { count: 0, last: null }; }
+    catch (e) { return { count: 0, last: null }; }
+  }
+  function renderStreak() {
+    const el = $('streak');
+    if (!PROFILE) { el.hidden = true; return; }
+    const s = getStreak();
+    const today = todayStr(), yest = ymd(Date.now() - 86400000);
+    const alive = s.last === today || s.last === yest;   // not yet broken
+    el.hidden = false;
+    el.textContent = '🔥 ' + (alive ? s.count : 0);
+    el.classList.toggle('active', s.last === today);      // reviewed today
+  }
+  function bumpStreak() {
+    const today = todayStr();
+    const s = getStreak();
+    if (s.last === today) return;                         // already counted today
+    s.count = (s.last === ymd(Date.now() - 86400000)) ? s.count + 1 : 1;
+    s.last = today;
+    try { localStorage.setItem(streakKey(), JSON.stringify(s)); } catch (e) {}
+    renderStreak();
   }
 
   function showGate() {
@@ -371,6 +407,7 @@
     const st = (await getOne(SRS, id)) || { id, ...newState() };
     schedule(st, g);
     await putOne(SRS, st);
+    bumpStreak();
     queue.shift();
     // "Again" re-queues the card for later in the same session.
     if (g === AGAIN) queue.push(id);
