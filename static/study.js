@@ -342,14 +342,21 @@
     q = (q || '').trim().toLowerCase();
     const cards = await getAll('cards');
     if (cards.length === 0) { box.innerHTML = '<p class="emptyhint">Download a deck from the Library tab first.</p>'; return; }
+    const savedOnly = $('saved-only').checked;
     let hits = cards;
-    if (q) hits = cards.filter((c) =>
+    if (savedOnly) hits = hits.filter((c) => savedSet.has(c.id));
+    if (q) hits = hits.filter((c) =>
       c.characters.toLowerCase().includes(q) ||
       c.jyutping.toLowerCase().includes(q) ||
       (c.english || '').toLowerCase().includes(q));
     hits = hits.slice(0, 200);
     box.innerHTML = '';
-    if (hits.length === 0) { box.innerHTML = '<p class="emptyhint">No matches.</p>'; return; }
+    if (hits.length === 0) {
+      box.innerHTML = '<p class="emptyhint">' +
+        (savedOnly ? 'No saved cards' + (q ? ' match that.' : ' yet — tap + Save on a card.') : 'No matches.') +
+        '</p>';
+      return;
+    }
     const frag = document.createDocumentFragment();
     hits.forEach((c) => frag.appendChild(cardEl(c, savedSet)));
     box.appendChild(frag);
@@ -439,6 +446,7 @@
   document.querySelectorAll('.tabbar button').forEach((b) =>
     b.addEventListener('click', () => showTab(b.dataset.tab)));
   $('search').addEventListener('input', (e) => runSearch(e.target.value));
+  $('saved-only').addEventListener('change', () => runSearch($('search').value));
 
   function setNet() {
     $('netdot').classList.toggle('online', navigator.onLine);

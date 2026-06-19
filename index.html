@@ -48,7 +48,10 @@
   .prog { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--muted); }
   .emptyhint { color: var(--muted); font-size: .9rem; padding: 1.5rem 0; text-align: center; }
   .searchbox { width: 100%; box-sizing: border-box; padding: .7rem .9rem; font: inherit;
-               border: 1px solid var(--line); border-radius: 10px; margin-bottom: 1rem; }
+               border: 1px solid var(--line); border-radius: 10px; margin-bottom: .6rem; }
+  .savedonly { display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1rem;
+               font-size: .82rem; color: var(--ink-2); cursor: pointer; user-select: none; }
+  .savedonly input { accent-color: var(--jade); }
   /* review */
   .revcounts { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--muted); margin-bottom: 1rem; }
   .grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-top: 1rem; }
@@ -103,6 +106,7 @@
     <section class="panel" id="panel-browse">
       <input class="searchbox" id="search" type="search"
              placeholder="Search characters · jyutping · english" autocomplete="off">
+      <label class="savedonly"><input type="checkbox" id="saved-only"> Saved only</label>
       <div id="browse-results"></div>
     </section>
 
