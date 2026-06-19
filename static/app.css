@@ -1,0 +1,229 @@
+/* Immersion Canto — shared identity.
+   Thesis: tone is the content. Jyutping syllables are tinted by tone number. */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Noto+Sans+HK:wght@500;700&display=swap');
+
+:root {
+  --paper:   #eef1ec;   /* cool sage — not warm cream */
+  --surface: #ffffff;
+  --raised:  #f7f9f6;
+  --ink:     #18241f;
+  --ink-2:   #3c4a43;
+  --muted:   #6a766e;
+  --line:    #dde3dc;
+  --jade:    #11785e;
+  --jade-d:  #0c5946;
+  --amber:   #d99a3f;
+  --rose:    #c0392b;
+
+  /* the six Cantonese tones — fixed scale, the product's signature */
+  --t1: #2f72b8;  /* high level   */
+  --t2: #1f9d57;  /* high rising  */
+  --t3: #8a7320;  /* mid level    */
+  --t4: #c0392b;  /* low falling  */
+  --t5: #b6562b;  /* low rising   */
+  --t6: #128a86;  /* low level    */
+
+  --r: 12px;
+  --shadow: 0 1px 2px rgba(24,36,31,.04), 0 8px 24px -12px rgba(24,36,31,.18);
+}
+
+/* Per-user theme — Kita prefers light purple. Retints the whole brand by
+   overriding the accent + background tokens; the six tone colors stay fixed. */
+.theme-kita {
+  --paper:   #f3f0fb;
+  --surface: #ffffff;
+  --raised:  #f7f4fd;
+  --line:    #e4ddf2;
+  --jade:    #9b7ef0;   /* light purple — buttons, brand mark, active nav */
+  --jade-d:  #6d4bc4;   /* deeper purple — links, text on light backgrounds */
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--jade-d); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+.han { font-family: 'Noto Sans HK', 'Inter', sans-serif; }
+
+/* tone-colored jyutping --------------------------------------------------*/
+.jyut { font-family: 'JetBrains Mono', monospace; letter-spacing: -.01em; }
+.syl  { white-space: nowrap; }
+/* tone digit + Chao contour mark (ported from CantoBridge's _TonePainter) */
+.syl .tn { display: inline-flex; align-items: center; gap: .12em; font-weight: 700; }
+.syl .td { font-size: .78em; }
+.syl .tm { width: .6em; height: .72em; vertical-align: middle; overflow: visible; }
+.t1, .t1 .tn { color: var(--t1); }
+.t2, .t2 .tn { color: var(--t2); }
+.t3, .t3 .tn { color: var(--t3); }
+.t4, .t4 .tn { color: var(--t4); }
+.t5, .t5 .tn { color: var(--t5); }
+.t6, .t6 .tn { color: var(--t6); }
+
+/* top bar ----------------------------------------------------------------*/
+.topbar {
+  display: flex; align-items: center; gap: 1rem;
+  padding: .85rem 1.5rem; background: var(--surface);
+  border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+  /* clear the Dynamic Island / notch when installed to the home screen */
+  padding-top: max(.85rem, env(safe-area-inset-top));
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+.brand { display: flex; align-items: center; gap: .6rem; font-weight: 700;
+         font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.05rem;
+         letter-spacing: -.02em; color: var(--ink); }
+.brand:hover { text-decoration: none; }
+.brand .mark {
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--jade); color: #fff; font-family: 'Noto Sans HK', sans-serif;
+  font-weight: 700; font-size: 1rem;
+}
+.brand .mark::after { content: '粵'; }
+.spacer { flex: 1; }
+.navlink { color: var(--ink-2); font-weight: 500; font-size: .9rem; padding: .35rem .7rem;
+           border-radius: 8px; }
+.navlink:hover { background: var(--raised); text-decoration: none; }
+.navlink.active { color: var(--jade-d); background: rgba(17,120,94,.08); }
+
+.tier { font-family: 'JetBrains Mono', monospace; font-size: .68rem; letter-spacing: .08em;
+        padding: .2rem .5rem; border-radius: 999px; border: 1px solid var(--line);
+        color: var(--muted); }
+.tier.premium { color: var(--amber); border-color: var(--amber); }
+
+/* buttons ----------------------------------------------------------------*/
+.btn { font: inherit; font-weight: 600; font-size: .88rem; cursor: pointer;
+       border-radius: 9px; padding: .5rem .9rem; border: 1px solid transparent;
+       background: var(--jade); color: #fff; transition: filter .12s, background .12s; }
+.btn:hover { filter: brightness(1.06); }
+.btn:active { filter: brightness(.95); }
+.btn-ghost { background: var(--surface); color: var(--ink-2); border-color: var(--line); }
+.btn-ghost:hover { background: var(--raised); filter: none; }
+:focus-visible { outline: 2px solid var(--jade); outline-offset: 2px; border-radius: 6px; }
+
+.status { font-size: .82rem; color: var(--muted); font-weight: 500; }
+.status.ok   { color: var(--jade-d); }
+.status.warn { color: var(--amber); }
+.status.err  { color: var(--rose); }
+
+/* bottom tab bar — mobile only, thumb-reachable primary nav --------------*/
+.botnav { display: none; }
+/* keep icons small even if the stylesheet is slow/blocked — belt and braces
+   alongside the explicit width/height on the <svg> elements */
+.botnav .ic, .botnav svg { width: 24px; height: 24px; flex: 0 0 auto; display: block; }
+.botnav .badge { position: absolute; top: .15rem; left: 58%; min-width: 16px;
+                 background: var(--amber); color: #fff; border-radius: 999px;
+                 font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 700;
+                 line-height: 16px; text-align: center; padding: 0 3px; }
+
+/* ---- mobile (phones, the primary target) ---- */
+@media (max-width: 720px) {
+  .topbar { gap: .5rem; }
+  .brand-text { display: none; }          /* keep just the 粵 mark */
+  .topnav { display: none; }              /* desktop links move to the bottom bar */
+  .tier { font-size: .72rem; }
+
+  body { padding-bottom: calc(58px + env(safe-area-inset-bottom)); }
+
+  .botnav {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--surface); border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 16px -8px rgba(24,36,31,.25);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .botnav a {
+    position: relative; flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: .12rem; padding: .5rem 0 .45rem;
+    font-size: .66rem; font-weight: 600; color: var(--muted);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .botnav a:hover { text-decoration: none; }
+  .botnav a.active { color: var(--jade-d); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* --- card layout (shared; the study PWA has no inline card styles, and the
+   web pages override these with their own inline <style> loaded after this). --- */
+.card { display: grid; grid-template-columns: 160px 1fr; gap: 1.1rem;
+        background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+        padding: .9rem; margin: .9rem 0; box-shadow: var(--shadow); }
+.card.nomedia { grid-template-columns: 1fr; }
+.card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 8px; }
+.card .eng { color: var(--ink-2); margin-top: .2rem; }
+.cardfoot { display: flex; align-items: center; justify-content: space-between;
+            gap: .5rem; margin-top: .55rem; }
+.card .src { color: var(--muted); font-size: .78rem; }
+.card audio { width: 100%; max-width: 320px; margin-top: .55rem; height: 34px; }
+.btn-save { font: inherit; font-weight: 600; font-size: .8rem; cursor: pointer;
+            white-space: nowrap; flex: none; border-radius: 999px; padding: .3rem .75rem;
+            border: 1px solid var(--line); background: var(--surface);
+            color: var(--jade-d); transition: background .12s, border-color .12s; }
+.btn-save:hover { background: var(--raised); }
+.btn-save.is-saved { background: var(--jade); border-color: var(--jade); color: #fff; }
+.btn-save:disabled { opacity: .6; cursor: default; }
+@media (max-width: 560px) {
+  /* Stack image over text; cap its height so a clip screenshot stays modest
+     and never widens the page (no horizontal scroll). */
+  .card, .card.nomedia { grid-template-columns: 1fr; }
+  .card img { max-height: 180px; aspect-ratio: 16/9; }
+}
+
+/* --- word-for-word reading: each Chinese word stacked over its Jyutping --- */
+/* Canonical layout shared by every page (search/browse/review duplicate this
+   inline; the study PWA loads only app.css, so it must live here too). */
+.reading { display: flex; flex-wrap: wrap; align-items: flex-end;
+           justify-content: center; gap: .1rem .15rem; }
+.reading .w { display: inline-flex; flex-direction: column; align-items: center;
+              padding: .1rem .3rem; }
+.reading .w .wh { font-size: 1.35rem; line-height: 1.25; }
+.reading .w .wj { font-size: .8rem; margin: .12rem 0 0; opacity: .85; white-space: nowrap; }
+.reading .w.latin .wh { font-size: 1.1rem; }
+.reading .w.latin .wj::before { content: "\200b"; }  /* reserve the jyutping line so .wh stays aligned */
+
+/* --- dictionary popup ---------------------------------------------------- */
+/* Affordance: defineable word cells are tappable and underlined on hover. */
+.reading .w:not(.latin) { cursor: pointer; }
+.reading .w:not(.latin) .wh {
+  text-decoration: underline; text-decoration-style: dotted;
+  text-decoration-color: var(--line); text-underline-offset: 3px;
+}
+.reading .w:not(.latin):hover .wh,
+.reading .w.dict-active .wh { text-decoration-color: var(--jade); }
+.reading .w.dict-active { background: rgba(17,120,94,.12); }
+
+.dictpop {
+  position: absolute; z-index: 60; max-width: min(22rem, calc(100vw - 16px));
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); box-shadow: 0 10px 30px -8px rgba(24,36,31,.35);
+  padding: .7rem .85rem; font-size: .9rem; color: var(--ink);
+  opacity: 0; visibility: hidden; transform: translateY(-3px);
+  transition: opacity .12s, transform .12s; pointer-events: none;
+}
+.dictpop.open { opacity: 1; visibility: visible; transform: none;
+                pointer-events: auto; }
+.dictpop .dp-head { display: flex; align-items: baseline; gap: .5rem;
+  margin-bottom: .35rem; padding-bottom: .35rem; border-bottom: 1px solid var(--line); }
+.dictpop .dp-head b { font-size: 1.25rem; line-height: 1; }
+.dictpop .dp-note { color: var(--muted); font-size: .72rem; }
+.dictpop .dp-sense + .dp-sense { margin-top: .5rem; padding-top: .5rem;
+  border-top: 1px dashed var(--line); }
+.dictpop .dp-jyut { font-family: 'JetBrains Mono', monospace;
+  color: var(--jade-d); font-size: .82rem; font-weight: 600; }
+.dictpop .dp-pos { display: inline-block; margin-left: .5rem; font-size: .68rem;
+  font-style: italic; font-weight: 600; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 999px; padding: .03rem .45rem; }
+.dictpop .dp-ch { font-size: 1.05rem; margin-right: .4rem; }
+.dictpop .dp-tag { display: inline-block; margin-left: .5rem; font-size: .66rem;
+  font-weight: 600; color: var(--jade-d); background: rgba(17,120,94,.10);
+  border-radius: 999px; padding: .05rem .45rem; }
+.dictpop ul { margin: .25rem 0 0; padding-left: 1.1rem; }
+.dictpop li { margin: .1rem 0; color: var(--ink-2); }
+.dictpop .dp-empty { color: var(--muted); }
